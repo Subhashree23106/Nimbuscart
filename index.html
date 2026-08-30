@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NimbusCart | Product Catalog</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 36px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Main container */
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+            color: #111827;
+        }
+
+        /* Error */
+        #error {
+            display: none;
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc2626;
+        }
+
+        /* Table */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-size: 15px;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 15px;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Empty state */
+        #emptyMessage {
+            text-align: center;
+            padding: 25px;
+            color: #6b7280;
+            display: none;
+        }
+
+        /* Form */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 7px;
+            color: #374151;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 7px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            background: #93c5fd;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading */
+        #loading {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 25px 15px;
+            margin-top: 40px;
+            background: #111827;
+            color: #d1d5db;
+            font-size: 14px;
+        }
+
+        footer strong {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+
+            header h1 {
+                font-size: 30px;
+            }
+
+            .container {
+                width: 95%;
+                margin: 20px auto;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            th,
+            td {
+                padding: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>🛒 NimbusCart</h1>
+        <p>Simple & Modern Product Management System</p>
+    </header>
+
+    <main class="container">
+
+        <!-- Error Message -->
+        <div id="error"></div>
+
+        <!-- Product Catalog -->
+        <section class="section">
+
+            <h2>📦 Product Catalog</h2>
+
+            <div id="loading">
+                Loading products...
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="products">
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="emptyMessage">
+                No products available. Add your first product below.
+            </div>
+
+        </section>
+
+
+        <!-- Add Product -->
+        <section class="section">
+
+            <h2>➕ Add New Product</h2>
+
+            <form id="productForm">
+
+                <div class="form-grid">
+
+                    <div class="input-group">
+                        <label for="name">Product Name</label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter product name"
+                            required
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label for="price">Price</label>
+
+                        <input
+                            type="number"
+                            id="price"
+                            placeholder="Enter price"
+                            step="0.01"
+                            min="0"
+                            required
+                        >
+                    </div>
+
+                    <div class="input-group">
+                        <label for="stock">Stock</label>
+
+                        <input
+                            type="number"
+                            id="stock"
+                            placeholder="Enter stock"
+                            min="0"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <button type="submit" id="submitButton">
+                    Add Product
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+        © 2026 NimbusCart | <strong>By Adyasha Panda</strong>
+    </footer>
+
+
+    <script>
+
+        async function loadProducts() {
+
+            const error = document.getElementById("error");
+            const loading = document.getElementById("loading");
+            const table = document.getElementById("products");
+            const emptyMessage = document.getElementById("emptyMessage");
+
+            try {
+
+                error.style.display = "none";
+                loading.style.display = "block";
+
+                const response = await fetch("/api/items");
+
+                if (!response.ok) {
+                    throw new Error("Failed to load products");
+                }
+
+                const products = await response.json();
+
+                table.innerHTML = "";
+
+                loading.style.display = "none";
+
+                if (products.length === 0) {
+
+                    emptyMessage.style.display = "block";
+
+                    return;
+                }
+
+                emptyMessage.style.display = "none";
+
+                products.forEach(product => {
+
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td>${product.name}</td>
+                        <td>₹${Number(product.price).toFixed(2)}</td>
+                        <td>${product.stock}</td>
+                    `;
+
+                    table.appendChild(row);
+
+                });
+
+            } catch (err) {
+
+                loading.style.display = "none";
+
+                error.textContent =
+                    "Error loading products: " + err.message;
+
+                error.style.display = "block";
+            }
+        }
+
+
+        document
+            .getElementById("productForm")
+            .addEventListener("submit", async function(event) {
+
+                event.preventDefault();
+
+                const error = document.getElementById("error");
+                const submitButton =
+                    document.getElementById("submitButton");
+
+                try {
+
+                    error.style.display = "none";
+
+                    submitButton.disabled = true;
+                    submitButton.textContent = "Adding...";
+
+                    const product = {
+
+                        name: document
+                            .getElementById("name")
+                            .value
+                            .trim(),
+
+                        price: parseFloat(
+                            document.getElementById("price").value
+                        ),
+
+                        stock: parseInt(
+                            document.getElementById("stock").value
+                        )
+
+                    };
+
+                    const response = await fetch("/api/items", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify(product)
+
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Failed to add product");
+                    }
+
+                    document
+                        .getElementById("productForm")
+                        .reset();
+
+                    await loadProducts();
+
+                } catch (err) {
+
+                    error.textContent =
+                        "Error adding product: " + err.message;
+
+                    error.style.display = "block";
+
+                } finally {
+
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Add Product";
+
+                }
+
+            });
+
+
+        // Load products when page opens
+        loadProducts();
+
+    </script>
+
+</body>
+</html>

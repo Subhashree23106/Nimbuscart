@@ -1,0 +1,115 @@
+data.aws_caller_identity.current: Reading...
+data.aws_ami.ubuntu: Reading...
+data.aws_availability_zones.available: Reading...
+data.aws_key_pair.nimbuscart: Reading...
+aws_vpc.data: Refreshing state... [id=vpc-00eb675946d98dcff]
+aws_vpc.web: Refreshing state... [id=vpc-0fd5eae55e448c6d0]
+aws_eip.nat: Refreshing state... [id=eipalloc-06270de82d3061e7e]
+aws_vpc.app: Refreshing state... [id=vpc-06f0d85bc0a23f156]
+aws_iam_role.app_ec2: Refreshing state... [id=nimbuscart-app-ec2-role]
+data.aws_caller_identity.current: Read complete after 0s [id=180840261930]
+data.aws_key_pair.nimbuscart: Read complete after 0s [id=key-0cc96dd16db71367d]
+data.aws_availability_zones.available: Read complete after 0s [id=ap-south-1]
+data.aws_ami.ubuntu: Read complete after 0s [id=ami-07e5ce642bbc48c0d]
+aws_internet_gateway.web: Refreshing state... [id=igw-044871bc038abdb15]
+aws_subnet.web_public: Refreshing state... [id=subnet-0141949fd3f37005d]
+aws_vpc_peering_connection.web_app: Refreshing state... [id=pcx-09d751f98d67bf6db]
+aws_internet_gateway.app: Refreshing state... [id=igw-02db04e3683c02d8c]
+aws_subnet.app_private_b: Refreshing state... [id=subnet-05f6a468f63ee7300]
+aws_security_group.web: Refreshing state... [id=sg-03c0084b2f0c8bad0]
+aws_subnet.app_private_a: Refreshing state... [id=subnet-0db9c54e899a16a5c]
+aws_subnet.app_public: Refreshing state... [id=subnet-0ee7e0ea360242756]
+aws_security_group.app: Refreshing state... [id=sg-029a01799977636e1]
+aws_route_table.data_private: Refreshing state... [id=rtb-0c34004d5d00e427a]
+aws_subnet.data_private_b: Refreshing state... [id=subnet-0d55ca73f9645cb2b]
+aws_vpc_peering_connection.app_data: Refreshing state... [id=pcx-0fdd29ff26fedc019]
+aws_security_group.db: Refreshing state... [id=sg-0f058956658ae15c0]
+aws_subnet.data_private_a: Refreshing state... [id=subnet-0ca6f1aeb370c88e1]
+aws_route_table.app_public: Refreshing state... [id=rtb-0a448773e0cbb7541]
+aws_route_table.web_public: Refreshing state... [id=rtb-09c0ef4c6f57ba8f4]
+aws_nat_gateway.app: Refreshing state... [id=nat-04e2b9cf10e72af04]
+aws_route.data_to_app: Refreshing state... [id=r-rtb-0c34004d5d00e427a3322942084]
+aws_instance.web: Refreshing state... [id=i-0e79492d89373aea7]
+aws_route_table_association.data_private_b: Refreshing state... [id=rtbassoc-06cb141b129037eac]
+aws_route_table_association.data_private_a: Refreshing state... [id=rtbassoc-02bdb464941bed946]
+aws_db_subnet_group.nimbuscart: Refreshing state... [id=nimbuscart-db-subnet-group]
+aws_route_table_association.web_public: Refreshing state... [id=rtbassoc-0629cec37c605049e]
+aws_route.web_to_app: Refreshing state... [id=r-rtb-09c0ef4c6f57ba8f43322942084]
+aws_route_table_association.app_public: Refreshing state... [id=rtbassoc-02c408864e93d21cb]
+aws_route_table.app_private: Refreshing state... [id=rtb-04ed145d07a324b50]
+aws_route_table_association.app_private_a: Refreshing state... [id=rtbassoc-0bdc00c6beea02481]
+aws_route_table_association.app_private_b: Refreshing state... [id=rtbassoc-0e128155f2c3de34a]
+aws_route.app_to_data: Refreshing state... [id=r-rtb-04ed145d07a324b501218385255]
+aws_route.app_to_web: Refreshing state... [id=r-rtb-04ed145d07a324b50179966490]
+aws_iam_role_policy_attachment.app_ecr: Refreshing state... [id=nimbuscart-app-ec2-role/arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly]
+aws_iam_instance_profile.app_ec2: Refreshing state... [id=nimbuscart-app-ec2-profile]
+aws_instance.app: Refreshing state... [id=i-0464fb0c987c2659e]
+aws_db_instance.nimbuscart: Refreshing state... [id=db-N4RLOH5OX7LBQKTTXXHVPF4GFI]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # aws_route_table.app_private will be updated in-place
+  ~ resource "aws_route_table" "app_private" {
+        id               = "rtb-04ed145d07a324b50"
+      ~ route            = [
+          - {
+              - cidr_block                 = "0.0.0.0/0"
+              - nat_gateway_id             = "nat-04e2b9cf10e72af04"
+                # (12 unchanged attributes hidden)
+            },
+          - {
+              - cidr_block                 = "10.0.0.0/16"
+              - vpc_peering_connection_id  = "pcx-09d751f98d67bf6db"
+                # (12 unchanged attributes hidden)
+            },
+          - {
+              - cidr_block                 = "10.2.0.0/16"
+              - vpc_peering_connection_id  = "pcx-0fdd29ff26fedc019"
+                # (12 unchanged attributes hidden)
+            },
+          + {
+              + cidr_block     = "0.0.0.0/0"
+              + nat_gateway_id = "nat-04e2b9cf10e72af04"
+            },
+        ]
+        tags             = {
+            "Name" = "nimbuscart-app-private-rt"
+        }
+        # (6 unchanged attributes hidden)
+    }
+
+  # aws_route_table.web_public will be updated in-place
+  ~ resource "aws_route_table" "web_public" {
+        id               = "rtb-09c0ef4c6f57ba8f4"
+      ~ route            = [
+          - {
+              - cidr_block                 = "0.0.0.0/0"
+              - gateway_id                 = "igw-044871bc038abdb15"
+                # (12 unchanged attributes hidden)
+            },
+          - {
+              - cidr_block                 = "10.1.0.0/16"
+              - vpc_peering_connection_id  = "pcx-09d751f98d67bf6db"
+                # (12 unchanged attributes hidden)
+            },
+          + {
+              + cidr_block = "0.0.0.0/0"
+              + gateway_id = "igw-044871bc038abdb15"
+            },
+        ]
+        tags             = {
+            "Name" = "nimbuscart-web-public-rt"
+        }
+        # (6 unchanged attributes hidden)
+    }
+
+Plan: 0 to add, 2 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.
