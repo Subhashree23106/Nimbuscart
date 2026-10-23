@@ -1,17 +1,6 @@
-# Nimbuscart
-Three-tier AWS application using Terraform, Docker, and Nginx.
-## Architecture
+# Sansio
 
-- **Web Tier:** Nginx on EC2
-- **App Tier:** Dockerized REST API
-- **Data Tier:** PostgreSQL database
-- **Infrastructure:** Terraform
-- **Networking:** VPCs, subnets, NAT Gateway, and VPC Peering
-
-## Features
-
-- View products
-- Add new products
-- REST API with PostgreSQL
-- Nginx reverse proxy
-- Automated AWS deployment using Terraform and Bash
+This folder contains code that can be used by alternative Flask
+implementations, for example Quart. The code therefore cannot do any
+IO, nor be part of a likely IO path. Finally this code cannot use the
+Flask globals.
